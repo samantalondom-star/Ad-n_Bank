@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Adán Bank - Iniciar sesión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+        darkMode: "class"
+    }
+    </script>
+</head>
+<body class="bg-[#FFF8E1] dark:bg-zinc-900 flex items-center justify-center h-screen font-sans transition-colors duration-300">
+<div class="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md border border-zinc-100">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-[#FFB300] tracking-tight">
+            Adán
+        </h1>
+        <p class="text-[#CDDC39] mt-2 font-medium text-sm uppercase tracking-wider">
+            Inicia sesión
+        </p>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="bg-[#FFE082] text-[#FF6F00] p-3 rounded-lg mb-5 text-sm font-medium text-center border border-[#FF6F00]">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <form method="POST" class="space-y-5">
+        {% csrf_token %}
+        <div>
+            <label class="block text-xs font-bold uppercase text-[#CDDC39] mb-1">
+                Usuario
+            </label>
+            <input
+                type="text"
+                name="username"
+                required
+                class="w-full border-b-2 border-[#CDDC39] focus:border-[#FFB300] outline-none py-2 transition-all font-medium"
+            >
+        </div>
+        <div>
+            <label class="block text-xs font-bold uppercase text-[#CDDC39] mb-1">
+                Contraseña
+            </label>
+            <input
+                type="password"
+                name="password"
+                required
+                class="w-full border-b-2 border-[#CDDC39] focus:border-[#FFB300] outline-none py-2 transition-all font-medium"
+            >
+        </div>
+        <button
+            type="submit"
+            class="w-full bg-[#FFB300] text-white py-3 rounded-full font-semibold hover:bg-[#EF6C00] transition-all shadow-md">
+            Iniciar sesión
+        </button>
+    </form>
+    <div class="text-center mt-6">
+        <p class="text-gray-500 text-sm">
+            ¿No tienes una cuenta?
+        </p>
+        <a
+            href="{% url 'registro' %}"
+            class="text-[#FFB300] font-semibold hover:text-[#EF6C00] transition">
+            Crear una cuenta
+        </a>
+    </div>
+</div>
+</body>
+</html>

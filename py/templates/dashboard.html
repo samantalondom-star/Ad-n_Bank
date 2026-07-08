@@ -1,0 +1,207 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Adán Bank</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class"
+        }
+    </script>
+</head>
+<body class="bg-[#FFF8E1] dark:bg-gray-900 transition-colors duration-500">
+<div class="min-h-screen py-10 px-4">
+    <div class="flex justify-between items-center mb-6">
+    <button
+        id="modoBtn"
+        class="bg-[#FFB300] dark:bg-gray-700 text-white px-5 py-2 rounded-full shadow hover:scale-105 transition">
+        {% trans "🌙 Cambiar modo" %}
+    </button>
+
+</div>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-zinc-100 dark:border-gray-700 mb-8">
+            <h1 class="text-4xl font-bold text-[#FFB300] text-center">
+                Adán Bank
+            </h1>
+            <p class="uppercase tracking-widest text-center text-sm mt-2 text-[#CDDC39]">
+                {% trans "Panel Principal" %}
+            </p>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="bg-[#FFE082] text-[#FF6F00] p-3 rounded-lg mt-6 text-center font-medium border border-[#FF6F00]">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="mt-8 text-center">
+                <p class="uppercase text-[#CDDC39] text-sm font-bold">
+                    {% trans "Saldo disponible" %}
+                </p>
+                <h2 class="text-5xl font-bold text-[#FFB300] mt-2">
+                    ${{ cuenta.saldo|floatformat:2 }}
+                </h2>
+                <p class="mt-2 text-gray-500 dark:text-gray-300">
+                    {{ cuenta.usuario }}
+                </p>
+            </div>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+                <h2 class="text-2xl font-bold text-[#FFB300] mb-2">
+                    {% trans "Depositar" %}
+                </h2>
+                <p class="text-gray-500 dark:text-gray-300 mb-4">
+                    {% trans "Agrega dinero a tu cuenta" %}
+                </p>
+                <form method="POST" action="{% url 'deposito' %}" class="space-y-4">
+                    {% csrf_token %}
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="monto"
+                        placeholder="50.00"
+                        class="w-full border-b-2 border-[#CDDC39] dark:bg-gray-800 dark:text-white outline-none py-2">
+                    <button
+                        class="w-full bg-[#FFB300] hover:bg-[#EF6C00] text-white py-3 rounded-full transition">
+                        {% trans "Depositar" %}
+                    </button>
+                </form>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+                <h2 class="text-2xl font-bold text-[#FFB300] mb-2">
+                    {% trans "Retirar" %}
+                </h2>
+                <p class="text-gray-500 dark:text-gray-300 mb-4">
+                    {% trans "Retira dinero de tu cuenta" %}
+                </p>
+                <form method="POST" action="{% url 'retiro' %}" class="space-y-4">
+                    {% csrf_token %}
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="monto"
+                        placeholder="20.00"
+                        class="w-full border-b-2 border-[#CDDC39] dark:bg-gray-800 dark:text-white outline-none py-2">
+                    <button
+                        class="w-full bg-[#FFB300] hover:bg-[#EF6C00] text-white py-3 rounded-full transition">
+                        {% trans "Retirar" %}
+                    </button>
+                </form>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+                <h2 class="text-2xl font-bold text-[#FFB300] mb-2">{% trans "Transferir" %}</h2>
+                <p class="text-gray-500 dark:text-gray-300 mb-4">{% trans "Envía dinero a otra cuenta" %}</p>
+                <form method="POST" action="{% url 'transferencia' %}" class="space-y-4">
+                    {% csrf_token %}
+                    <input type="text" name="destino" placeholder="{% trans "Usuario destino" %}" class="w-full border-b-2 border-[#CDDC39] dark:bg-gray-800 dark:text-white outline-none py-2">
+                    <input type="number" step="0.01" name="monto" placeholder="100.00" class="w-full border-b-2 border-[#CDDC39] dark:bg-gray-800 dark:text-white outline-none py-2">
+                    <button class="w-full bg-[#FFB300] hover:bg-[#EF6C00] text-white py-3 rounded-full transition">{% trans "Transferir" %}</button>
+                </form>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mt-8">
+    <h2 class="text-3xl font-bold text-[#FFB300] mb-6">
+        Mis Bóvedas
+    </h2>
+
+    <form method="POST" action="{% url 'crear_boveda' %}" class="flex gap-4 mb-6">
+        {% csrf_token %}
+
+        <input
+            type="text"
+            name="nombre"
+            placeholder="Nombre de la bóveda"
+            required
+            class="flex-1 border-b-2 border-[#CDDC39] dark:bg-gray-800 dark:text-white outline-none py-2">
+
+        <button
+            class="bg-[#FFB300] hover:bg-[#EF6C00] text-white px-6 rounded-full">
+            Crear
+        </button>
+    </form>
+
+    {% if bovedas %}
+        {% for boveda in bovedas %}
+            <div class="border rounded-xl p-4 mb-4 dark:border-gray-600">
+                <h3 class="text-xl font-bold text-[#FFB300]">
+                    {{ boveda.nombre }}
+                </h3>
+
+                <p class="text-gray-500 dark:text-gray-300">
+                    Saldo:
+                    <strong>${{ boveda.saldo }}</strong>
+                </p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-gray-500 dark:text-gray-300">
+            Todavía no tienes bóvedas.
+        </p>
+    {% endif %}
+</div>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mt-8">
+            <h2 class="text-3xl font-bold text-[#FFB300] mb-6">
+                {% trans "Historial de movimientos" %}
+            </h2>
+            {% if historial %}
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b dark:border-gray-600">
+                            <th class="text-left py-3 text-[#CDDC39]">
+                                {% trans "Tipo" %}
+                            </th>
+                            <th class="text-left py-3 text-[#CDDC39]">
+                                {% trans "Monto" %}
+                            </th>
+                            <th class="text-left py-3 text-[#CDDC39]">
+                                {% trans "Fecha" %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for mov in historial %}
+                        <tr class="border-b dark:border-gray-700 hover:bg-[#FFF8E1] dark:hover:bg-gray-700">
+                            <td class="py-3 dark:text-white">
+                                {{ mov.tipo }}
+                            </td>
+                            <td class="py-3 font-bold text-[#FFB300]">
+                                ${{ mov.monto }}
+                            </td>
+                            <td class="py-3 dark:text-gray-300">
+                                {{ mov.fecha }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-gray-500 dark:text-gray-300">
+                    {% trans "Aún no tienes movimientos" %}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+const html=document.documentElement;
+
+if(localStorage.getItem("modo")==="oscuro"){
+    html.classList.add("dark");
+}else{
+    html.classList.remove("dark");
+}
+
+document.getElementById("modoBtn").onclick=function(){
+    html.classList.toggle("dark");
+    if(html.classList.contains("dark")){
+        localStorage.setItem("modo","oscuro");
+    }else{
+        localStorage.setItem("modo","claro");
+    }
+}
+</script>
+</body>
+</html>

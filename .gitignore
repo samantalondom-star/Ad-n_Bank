@@ -1,0 +1,28 @@
+# ==============================================================================
+# GUARDÍAN DE GIT - ARCHIVOS IGNORADOS
+# ==============================================================================
+
+# Ignorar nuestro ambiente virtual personalizado (¡No subir!)
+Aplicacion
+
+# Archivos temporales que genera Python al ejecutarse solo en tu máquina
+*.pyc
+__pycache__/
+
+# Archivos ocultos del sistema operativo (Mac y Windows)
+.DS_Store
+Thumbs.db
+
+# Configuraciones locales de tu Visual Studio Code
+.vscode/
+# Entorno virtual
+.venv/
+# Base de datos
+db.sqlite3
+
+# VS Code
+.vscode/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
